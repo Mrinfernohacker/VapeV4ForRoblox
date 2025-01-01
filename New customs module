@@ -1,0 +1,52 @@
+-- AnimationChanger Module for Vape V4
+
+local AnimationChanger = {}
+
+-- Settings
+local animationId = "rbxassetid://YOUR_ANIMATION_ID"  -- Replace with your animation ID
+local enableAnimationChange = true  -- Toggle to enable/disable animation change
+
+-- Function to change animation
+function AnimationChanger:changeAnimation()
+    local player = game.Players.LocalPlayer
+    if player.Character and player.Character:FindFirstChild("Humanoid") then
+        local humanoid = player.Character.Humanoid
+        if humanoid and humanoid:FindFirstChild("Animator") then
+            -- Create a new animation object
+            local animation = Instance.new("Animation")
+            animation.AnimationId = animationId  -- Set the animation ID
+
+            -- Load and play the animation
+            humanoid:LoadAnimation(animation):Play()
+        end
+    end
+end
+
+-- Function to toggle the animation change
+function AnimationChanger:toggleAnimation()
+    enableAnimationChange = not enableAnimationChange
+    if enableAnimationChange then
+        print("Animation Change Enabled")
+    else
+        print("Animation Change Disabled")
+    end
+end
+
+-- Add a keybind to toggle animation change
+local UserInputService = game:GetService("UserInputService")
+
+UserInputService.InputBegan:Connect(function(input)
+    -- Example: Use "M" key to toggle animation
+    if input.KeyCode == Enum.KeyCode.M then
+        AnimationChanger:toggleAnimation()
+    end
+end)
+
+-- Periodically check if animation change is enabled
+game:GetService("RunService").Heartbeat:Connect(function()
+    if enableAnimationChange then
+        AnimationChanger:changeAnimation()
+    end
+end)
+
+return AnimationChanger
